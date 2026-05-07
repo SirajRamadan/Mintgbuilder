@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useSearch } from "wouter";
+import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Layers, Settings, Bell, Search, Grid, List,
@@ -172,9 +172,7 @@ function Sidebar({ activeCategory, setActiveCategory }: { activeCategory: string
 }
 
 export function Dashboard() {
-  const search = useSearch();
-  const showOnboarding = search.includes("onboarding=true");
-  const [onboarding, setOnboarding] = useState(showOnboarding);
+  const [onboarding, setOnboarding] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQ, setSearchQ] = useState("");

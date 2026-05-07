@@ -33,7 +33,7 @@ export function SignUp() {
       } else {
         await new Promise(r => setTimeout(r, 1200));
       }
-      navigate("/dashboard?onboarding=true");
+      navigate("/dashboard");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
     } finally {

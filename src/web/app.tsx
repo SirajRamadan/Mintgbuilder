@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Router } from "wouter";
+import { useHashLocation } from "wouter/use-hash-location";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { Landing } from "./pages/Landing";
 import { SignIn } from "./pages/SignIn";
@@ -29,6 +30,7 @@ export default function App() {
   }
 
   return (
+    <Router hook={useHashLocation}>
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/sign-in" component={SignIn} />
@@ -48,5 +50,6 @@ export default function App() {
         </div>
       </Route>
     </Switch>
+    </Router>
   );
 }
