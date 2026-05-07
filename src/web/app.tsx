@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Switch, Router } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { LoadingScreen } from "./components/LoadingScreen";
@@ -11,20 +11,7 @@ import { Pricing } from "./pages/Pricing";
 import { Templates } from "./pages/Templates";
 import "./styles.css";
 
-export default function App() {
-  const [loading, setLoading] = useState(() => {
-    return !sessionStorage.getItem("tf_visited");
-  });
-
-  const handleLoadComplete = () => {
-    setLoading(false);
-    sessionStorage.setItem("tf_visited", "1");
-  };
-
-  if (loading) {
-    return <LoadingScreen onComplete={handleLoadComplete} />;
-  }
-
+function AppRoutes() {
   return (
     <Router hook={useHashLocation}>
       <Switch>
@@ -48,4 +35,20 @@ export default function App() {
       </Switch>
     </Router>
   );
+}
+
+export default function App() {
+  const [showLoader, setShowLoader] = useState(true);
+
+  // Auto-complete loader after 3s max regardless
+  useEffect(() => {
+    const t = setTimeout(() => setShowLoader(false), 3200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (showLoader) {
+    return <LoadingScreen onComplete={() => setShowLoader(false)} />;
+  }
+
+  return <AppRoutes />;
 }
