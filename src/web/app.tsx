@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Route, Switch, Router } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { Landing } from "./pages/Landing";
 import { SignIn } from "./pages/SignIn";
@@ -10,6 +9,25 @@ import { Builder } from "./pages/Builder";
 import { Pricing } from "./pages/Pricing";
 import { Templates } from "./pages/Templates";
 import "./styles.css";
+
+// Inline hash location hook — works on GitHub Pages without server config
+function useHashLocation(): [string, (to: string) => void] {
+  const getHash = () => window.location.hash.replace(/^#/, "") || "/";
+
+  const [loc, setLoc] = useState(getHash);
+
+  useEffect(() => {
+    const handler = () => setLoc(getHash());
+    window.addEventListener("hashchange", handler);
+    return () => window.removeEventListener("hashchange", handler);
+  }, []);
+
+  const navigate = useCallback((to: string) => {
+    window.location.hash = to;
+  }, []);
+
+  return [loc, navigate];
+}
 
 export default function App() {
   const [loading, setLoading] = useState(() => {
