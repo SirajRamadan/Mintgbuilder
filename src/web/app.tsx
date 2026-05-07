@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Route, Switch, Router } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { LoadingScreen } from "./components/LoadingScreen";
@@ -12,13 +12,9 @@ import { Templates } from "./pages/Templates";
 import "./styles.css";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  // Only show loading screen on first visit
-  useEffect(() => {
-    const visited = sessionStorage.getItem("tf_visited");
-    if (visited) setLoading(false);
-  }, []);
+  const [loading, setLoading] = useState(() => {
+    return !sessionStorage.getItem("tf_visited");
+  });
 
   const handleLoadComplete = () => {
     setLoading(false);
@@ -31,25 +27,25 @@ export default function App() {
 
   return (
     <Router hook={useHashLocation}>
-    <Switch>
-      <Route path="/" component={Landing} />
-      <Route path="/sign-in" component={SignIn} />
-      <Route path="/sign-up" component={SignUp} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/builder/:id" component={Builder} />
-      <Route path="/builder" component={Builder} />
-      <Route path="/pricing" component={Pricing} />
-      <Route path="/templates" component={Templates} />
-      <Route>
-        <div className="min-h-screen flex items-center justify-center" style={{ background: "#050508" }}>
-          <div className="text-center">
-            <div className="text-6xl font-bold gradient-text mb-4" style={{ fontFamily: "Clash Display, sans-serif" }}>404</div>
-            <p style={{ color: "rgba(255,255,255,0.5)" }}>Page not found</p>
-            <a href="/" className="inline-block mt-4 btn-primary px-6 py-2.5 rounded-xl text-sm">Go Home</a>
+      <Switch>
+        <Route path="/" component={Landing} />
+        <Route path="/sign-in" component={SignIn} />
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/builder/:id" component={Builder} />
+        <Route path="/builder" component={Builder} />
+        <Route path="/pricing" component={Pricing} />
+        <Route path="/templates" component={Templates} />
+        <Route>
+          <div className="min-h-screen flex items-center justify-center" style={{ background: "#050508" }}>
+            <div className="text-center">
+              <div className="text-6xl font-bold gradient-text mb-4" style={{ fontFamily: "Clash Display, sans-serif" }}>404</div>
+              <p style={{ color: "rgba(255,255,255,0.5)" }}>Page not found</p>
+              <a href="#/" className="inline-block mt-4 btn-primary px-6 py-2.5 rounded-xl text-sm">Go Home</a>
+            </div>
           </div>
-        </div>
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
     </Router>
   );
 }
